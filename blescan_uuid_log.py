@@ -30,14 +30,13 @@ class ScanDelegate(DefaultDelegate):
             for (adtype, desc, value) in dev.getScanData():
                 if desc == 'Manufacturer':
                     res = beacon_parser(value, dev.rssi)
-                    print(str(res[0])+','+res[1]+','+res[2]+','+str(res[3])+','+res[4]+','+res[5]+','+res[6]+','+str(res[7]), file=log)
-                    print(str(res[0])+','+res[1]+','+res[2]+','+str(res[3])+','+res[4]+','+res[5]+','+res[6]+','+str(res[7]))
-                    print('\x1b[%dA' % (2))
+                    print(time.strftime("%Y%m%d-%H%M%S")+','+dev.addr + ','+str(res[0])+','+res[1]+','+res[2]+','+str(res[3])+','+res[4]+','+res[5]+','+res[6]+','+str(res[7]), file=log)
+                    print(time.strftime("%Y%m%d-%H%M%S")+','+dev.addr + ','+str(res[0])+','+res[1]+','+res[2]+','+str(res[3])+','+res[4]+','+res[5]+','+res[6]+','+str(res[7]))
+                    # print('\x1b[%dA' % (2))
 
 timestr = time.strftime("%Y%m%d-%H%M%S")
 log = open(timestr, 'w+', encoding='ISO-8859-1')
 
-print('======\nusage: python3 blescan blescan.py MAC_ADDR\nfor example:python3 blescan.py aa:bb:cc:dd:ee:00\n=====')
 if len(sys.argv) != 2:
     print('command usage error')
     sys.exit()
@@ -46,4 +45,8 @@ dest_addr = sys.argv[1]
 scanner = Scanner(0).withDelegate(ScanDelegate())
 
 while True:
-    devices = scanner.scan(20)
+    try:
+        devices = scanner.scan(20)
+        log.flush()
+    except:
+        scanner = Scanner(0).withDelegate(ScanDelegate())

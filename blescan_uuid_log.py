@@ -19,34 +19,26 @@ def beacon_parser(raw_data, rssi):
     MINOR = raw_data[46:50]
     RSSI_1M = raw_data[-2:]
     return [UUID, HW, SW, twos_complement(BATT, 8), MAJOR, MINOR, RSSI_1M, rssi]
-    # print(UUID, HW, SW, BATT, MAJOR, MINOR, twos_complement(RSSI_1M, 8))
 
 class ScanDelegate(DefaultDelegate):
     def __init__(self):
         DefaultDelegate.__init__(self)
 
     def handleDiscovery(self, dev, isNewDev, isNewData):
-        if dev.addr == dest_addr:
-            for (adtype, desc, value) in dev.getScanData():
-                if desc == 'Manufacturer':
-                    res = beacon_parser(value, dev.rssi)
-                    print(time.strftime("%Y%m%d-%H%M%S")+','+dev.addr + ','+str(res[0])+','+res[1]+','+res[2]+','+str(res[3])+','+res[4]+','+res[5]+','+res[6]+','+str(res[7]), file=log)
-                    print(time.strftime("%Y%m%d-%H%M%S")+','+dev.addr + ','+str(res[0])+','+res[1]+','+res[2]+','+str(res[3])+','+res[4]+','+res[5]+','+res[6]+','+str(res[7]))
-                    # print('\x1b[%dA' % (2))
+        for (adtype, desc, value) in dev.getScanData():
+            if desc == 'Manufacturer' and len(value) == 52:
+                res = beacon_parser(value, dev.rssi)
+                if res[0] == uuid.UUID('5de8c210-f981-4f11-8292-631f89450e40'):
+                    print(time.strftime("%Y%m%d-%H%M%S")+','+dev.addr + ','+str(res[0])+','+res[1]+','+res[2]+','
+                          +str(res[3])+','+res[4]+','+res[5]+','+res[6]+','+str(res[7]), file=log)
+                    print(time.strftime("%Y%m%d-%H%M%S")+','+dev.addr + ','+str(res[0])+','+res[1]+','+res[2]+','
+                          +str(res[3])+','+res[4]+','+res[5]+','+res[6]+','+str(res[7]))
 
 timestr = time.strftime("%Y%m%d-%H%M%S")
 log = open(timestr, 'w+', encoding='ISO-8859-1')
 
-if len(sys.argv) != 2:
-    print('command usage error')
-    sys.exit()
-
-dest_addr = sys.argv[1]
 scanner = Scanner(0).withDelegate(ScanDelegate())
 
 while True:
-    try:
-        devices = scanner.scan(20)
-        log.flush()
-    except:
-        scanner = Scanner(0).withDelegate(ScanDelegate())
+    scanner.scan(10)
+

@@ -25,15 +25,16 @@ class ScanDelegate(DefaultDelegate):
     def __init__(self):
         DefaultDelegate.__init__(self)
 
-    # def handleDiscovery(self, dev, isNewDev, isNewData):
-        # if dev.addr == dest_addr:
-        #     for (adtype, desc, value) in dev.getScanData():
-        #         if desc == 'Manufacturer':
-        #             beacon_parser(value)
-        #             print('\x1b[%dA' % (2))
+    def handleDiscovery(self, dev, isNewDev, isNewData):
+        if dev.addr == dest_addr:
+            for (adtype, desc, value) in dev.getScanData():
+                if desc == 'Manufacturer':
+                    res = beacon_parser(value, dev.rssi)
+                    print(res)
+                    print('\x1b[%dA' % (2))
 
 
-print('usage: python3 blescan blescan.py MAC_ADDR minutes\nfor example:python3 blescan.py aa:bb:cc:dd:ee:00')
+print('======\nusage: python3 blescan blescan.py MAC_ADDR\nfor example:python3 blescan.py aa:bb:cc:dd:ee:00\n=====')
 if len(sys.argv) != 2:
     print('command usage error')
     sys.exit()
@@ -43,13 +44,6 @@ scanner = Scanner(0).withDelegate(ScanDelegate())
 
 while True:
     try:
-        devices = scanner.scan(1)
-        for dev in devices:
-            if dev.addr == dest_addr:
-                for (adtype, desc, value) in dev.getScanData():
-                    if desc == 'Manufacturer':
-                        res = beacon_parser(value, dev.rssi)
-                        print(res)
-                        print('\x1b[%dA' % (2))
+        devices = scanner.scan(20)
     except:
         scanner = Scanner(0).withDelegate(ScanDelegate())

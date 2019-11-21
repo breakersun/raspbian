@@ -33,16 +33,12 @@ class ScanDelegate(DefaultDelegate):
         #             print('\x1b[%dA' % (2))
 
 
-print('usage: python3 blescan blescan.py MAC_ADDR minutes\nfor example:python3 blescan.py aa:bb:cc:dd:ee:00 10')
-if len(sys.argv) != 3:
+print('usage: python3 blescan blescan.py MAC_ADDR minutes\nfor example:python3 blescan.py aa:bb:cc:dd:ee:00')
+if len(sys.argv) != 2:
     print('command usage error')
     sys.exit()
 
 dest_addr = sys.argv[1]
-scan_duration = int(sys.argv[2])
-print('BT_MAC : ', dest_addr)
-print('Test Minutes : ', scan_duration)
-
 scanner = Scanner(0).withDelegate(ScanDelegate())
 
 while True:

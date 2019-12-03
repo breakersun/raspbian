@@ -58,8 +58,7 @@
    访问ip:8081
 
    - 账号 admin
-- 密码 admin
-   
+   - 密码 admin
 7. 托管抓log到后台
 
    由于上述执行命令，需要实时保持console的连接。

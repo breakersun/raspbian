@@ -55,14 +55,11 @@
 
 6. 获取log文件
 
-   ctrl + c停止当前正在进行的测试
+   访问ip:8081
 
-   执行python -m SimpleHTTPServer 8080
-
-   PC访问IP:8080
-
-   找到对应时间的log文件，并下载
-
+   - 账号 admin
+- 密码 admin
+   
 7. 托管抓log到后台
 
    由于上述执行命令，需要实时保持console的连接。

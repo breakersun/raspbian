@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="PublishConfigData" autoUpload="Always" serverName="root@192.168.123.174:3322" autoUploadExternalChanges="true">
+    <serverData>
+      <paths name="192.168.123.174">
+        <serverdata>
+          <mappings>
+            <mapping local="$PROJECT_DIR$" web="/" />
+          </mappings>
+        </serverdata>
+      </paths>
+      <paths name="pi@192.168.123.174:22">
+        <serverdata>
+          <mappings>
+            <mapping deploy="/home/pi/dockers/src/raspbian_docker" local="$PROJECT_DIR$" />
+          </mappings>
+        </serverdata>
+      </paths>
+      <paths name="root@192.168.123.174:3322">
+        <serverdata>
+          <mappings>
+            <mapping deploy="/src/raspbian_docker" local="$PROJECT_DIR$" />
+          </mappings>
+        </serverdata>
+      </paths>
+    </serverData>
+    <option name="myAutoUpload" value="ALWAYS" />
+  </component>
+</project>

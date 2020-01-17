@@ -21,6 +21,7 @@ p = Peripheral('ba:03:4c:3a:c3:70', "public")
 p.setDelegate(MyDelegate(p))
 
 sr_service = p.getServiceByUUID(sr_service_uuid)
+p.setMTU(40)
 
 sr_tx_char = sr_service.getCharacteristics(sr_tx_uuid)[0]
 sr_tx_char_value_handle = sr_tx_char.getHandle()
@@ -36,7 +37,11 @@ print("Indication is turned on for TX")
 sr_auth_char = sr_service.getCharacteristics(sr_auth_char_uuid)[0]
 sr_auth_char_value_handle = sr_auth_char.getHandle()
 
-p.writeCharacteristic(sr_auth_char_value_handle, struct.pack('<bbbb', 0x01, 0x02, 0x03, 0x04))
+p.writeCharacteristic(sr_auth_char_value_handle, struct.pack('<BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB',
+                                                             0x00, 0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0a, 0x0b, 0x0c, 0x0d,
+                                                             0x0e, 0x0f, 0x76, 0x49, 0xab, 0xac, 0x81, 0x19, 0xb2, 0x46, 0xce, 0xe9, 0x8e, 0x9b, 0x12,
+                                                             0xe9, 0x19, 0x7d))
+
 
 while True:
     if p.waitForNotifications(1.0):

@@ -21,7 +21,7 @@ p = Peripheral('ba:03:4c:3a:c3:70', "public")
 p.setDelegate(MyDelegate(p))
 
 sr_service = p.getServiceByUUID(sr_service_uuid)
-p.setMTU(40)
+p.setMTU(36)
 
 sr_tx_char = sr_service.getCharacteristics(sr_tx_uuid)[0]
 sr_tx_char_value_handle = sr_tx_char.getHandle()

@@ -31,11 +31,13 @@ class ScanDelegate(DefaultDelegate):
                 res = beacon_parser(value, dev.rssi)
                 if res[0] == uuid.UUID('5de8c210-f981-4f11-8292-631f89450e40'):
                     print(time.strftime("%Y%m%d-%H%M%S")+','+dev.addr, file=log)
-                    print(time.strftime("%Y%m%d-%H%M%S")+','+dev.addr + ','+str(res[0])+','+res[1]+','+res[2]+','
-                          +str(res[3])+','+res[4]+','+res[5]+','+res[6]+','+str(res[7]))
-			else
-				if dev.addr == 'e0:7d:ea:f2:84:50':
-					print value
+                    print(time.strftime("%Y%m%d-%H%M%S")+','+dev.addr)
+			
+            if desc == 'Manufacturer' and len(value) == 20:
+                addr = value[16:18] + ':' + value[14:16] + ':' + value[12:14] + ':' + value[10:12] + ':' + value[8:10] + ':' + value[6:8]
+                if addr == dev.addr:
+                    print(time.strftime("%Y%m%d-%H%M%S")+','+dev.addr, file=log)
+                    print(time.strftime("%Y%m%d-%H%M%S")+','+dev.addr)
 				
 
 timestr = time.strftime("%Y%m%d-%H%M%S")

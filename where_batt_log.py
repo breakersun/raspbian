@@ -1,6 +1,8 @@
 import adtypes
 import sys, uuid, time
 from bluepy.btle import Scanner, DefaultDelegate
+import datetime
+import csv
 
 def twos_complement(hexstr, bits):
     value = int(hexstr,16)
@@ -26,19 +28,25 @@ class ScanDelegate(DefaultDelegate):
 
     def handleDiscovery(self, dev, isNewDev, isNewData):
         for (adtype, desc, value) in dev.getScanData():
-            if desc == 'Manufacturer' and len(value) == 52:
-                res = beacon_parser(value, dev.rssi)
-                if res[0] == uuid.UUID('5de8c210-f981-4f11-8292-631f89450e40'):
-                    print(time.strftime("%Y%m%d-%H%M%S")+','+dev.addr + ','+str(res[0])+','+res[1]+','+res[2]+','
-                          +str(res[3])+','+res[4]+','+res[5]+','+res[6]+','+str(res[7]), file=log)
-                    print(time.strftime("%Y%m%d-%H%M%S")+','+dev.addr + ','+str(res[0])+','+res[1]+','+res[2]+','
-                          +str(res[3])+','+res[4]+','+res[5]+','+res[6]+','+str(res[7]))
+            if desc == 'Manufacturer' and len(value) == 54:
+                VID = ''.join([value[2], value[3], value[0], value[1]])
+                if VID == '03f5':
+                    print(str(datetime.datetime.now()) +
+                          ', ' + dev.addr +
+                          ', ' + str(int(''.join(value[50:52]), 16)))
+                    csv_writer.writerow([datetime.datetime.now().strftime("%d/%m/%Y %H:%M:%S"),
+                                         dev.addr,
+                                         int(''.join(value[50:52]), 16)])
 
 timestr = time.strftime("%Y%m%d-%H%M%S")
-log = open(timestr, 'w+', encoding='ISO-8859-1')
+log = open(timestr + '.csv', 'w+', newline='')
+csv_writer = csv.writer(log)
 
 scanner = Scanner(0).withDelegate(ScanDelegate())
 
 while True:
     scanner.scan(10)
+    scanner.scan(10)
+    time.sleep(40)
+    time.sleep(60 * 59)
 
